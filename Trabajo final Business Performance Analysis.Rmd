@@ -1,0 +1,248 @@
+---
+title: "Trabajo Final Business Performance Analysis"
+author: "Juan Antonio Clavijo González"
+date: "28-11-2019"
+output:
+  html_document:
+    
+    toc: true
+    collapsed: false
+    number_sections: true
+    smooth_scroll: true
+    theme: sand
+    toc_float: true
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(plyr)
+library(stringr)
+library(lubridate)
+library(ggplot2)
+library(reshape2)
+library(plotly)
+library(rvest)
+library(knitr)
+```
+
+# Introducción
+
+  Vivimos en la época en la que se dice que los datos son el nuevo petróleo. Por ello, la necesidad de extraer, manipular y representar los datos de manera efectiva es un factor clave a la hora de sacar provecho de los datos que tratamos de estudiar.  
+  
+  Ya sea para tomar decisiones a nivel empresarial o para exponer las conclusiones de una investigación, debemos aprender a manejar al más alto nivel las herramientas de manipulación y representación que tenemos ha nuestra disposición. En este documento se discuten algunos sitios web para aprender a manejar las herramientas de R para manipular datos en formato de texto, de manera que después se puedan representar o manipular de manera adecuada. También hablaremos de sitios web para aprender a presentar documentos con R Markdown, tratando de mejorar la versión estandar.  
+  
+   Por último se presenta un análisis de un conjunto de datos. Resaltar que el fin de este documento no es realizar un análisis estadístico de los datos, sino de un análisis general sobre las características de este.  
+  
+# Expresiones regulares y Markdown
+
+  En este apartado se van discutir, exponiendo las ventajas y desventajas, distintas páginas que ofrecen información sobre el uso de expresiones regulares (*"regex"*) y de Markdown.
+
+## Expresiones regulares
+
+   Las cadenas de caracteres suelen contener datos no estructurados o semiestructurados, las expresiones regulares resultan útiles porque permiten describir patrones en ellas a través de un lenguaje conciso. A continuación se van a discutir dos sitios web donde se da información sobre las expresiones regulares.
+   
+   La primera de las opciones que se presenta es, [R para Ciencia de Datos](https://es.r4ds.hadley.nz/cadenas-de-caracteres.html#anclas).  
+  
+  Este es el sitio web de la versión en español de __*“R for Data Science”*__, de Hadley Wickham y Garrett Grolemund. En el apartado 14 del libro, titulado *Cadenas de caracteres*, ofrece una guía detallada sobre el empleo de las expresiones regulares para manipular cadenas de caracteres.  
+  
+  La teoría y los ejemplos que se presentan en el libro se hacen empleando las librerías `tidyverse`,`datos` y `stringr`. La finalidad de este documento es aprender a usar correctamente las expresiones regulares para manipular las cadenas de texto a nuestro antojo, con el fin de limpiar los datos de manera que nos quedemos con aquellas partes o datos que realmente son relevantes en nuestro análisis. El empleo de las librerías citadas no es el único para manipular cadenas de texto. R ofrece comandos por defecto sin necesidad de emplear el paquete `stringr`.  
+  
+  Sin duda alguna, lo que diferencia este libro de otras páginas donde dan información sobre expresiones regulares, es la calidad de las explicaciones y la dificultad de los ejemplos.  
+  
+  Otra opción es la página de [Diego Calvo](http://www.diegocalvo.es/expresiones-regulares-en-r/).  
+  
+  Esta página ofrece una vista rápida a las expresiones regulares y a su funcionalidad dependiendo de la operación que se quiera realizar. Es bastante más corta en cuanto a información en comparación con *R para Ciencia de Datos*, pero es un recurso bastante bueno si ya se tiene cierto dominio de las expresiones regulares y queremos acudir para recordar cómo funciona alguna extructura en concreto.  
+  
+  La elección entre las dos opciones expuestas depende de nuestro nivel de uso de las expresiones regulares. Si somos principiantes o queremos una explicación más detallada, sin duda la mejor opción es *R para Ciencia de Datos*. En cambio si tenemos poco tiempo o únicamente necesitamos de un vistazo rápido, la mejor opción es acudir la página de Diego Calvo.
+  
+## Markdown
+
+  Ahora se presentan dos páginas con recursos de R Markdown. Estas son la [**web oficial de R Markdown**](https://rmarkdown.rstudio.com/index.html) y el apartado de [**R Markdown**](https://es.r4ds.hadley.nz/r-markdown.html) del sitio web del libro *R para Ciencia de Datos*.
+
+  En la web oficial de R Markdown se puede encontrar toda la información necesaria para iniciarse con R Markdown. La página se divide en diferentes partes:  
+
+  * La primera pestaña nos lleva al apartado *Get Started*, donde presenta cómo generar documentos, los diferentes formatos en los que se puede generar y otras funcionalidades que ofrece R Markdown.  
+  * En *Gallery* podemos encontrar diferentes ejemplos de documentos que se pueden generar con R Markdown.
+  * En *Formats* nos ofrece links a los diferentes formatos de R Markdown.  
+  * En *Articles* ponen a disposición los articulos más relevantes sobre el uso de R Markdown.  
+  * Finalmente *Book* es un enlace al sitio web del libro __*R Markdown: The Definitive Guide*__.  
+    
+  La otra recomendación es el apartado de *R Markdown* del sitio web del libro *R para Ciencia de Datos*. Aquí encontramos una guía resumida de la sintaxtis de R Markdown, la manera de generar bloques de código, cómo presentar tablas y modificar el encabezado de nuestro documento R Markdown. También nos da una serie de páginas de referencia donde podemos seguir ampliando nuestro conocimiento de R Markdown.  
+  
+  La principal diferencia entre las dos opciones que se han comentado es el idioma. La página oficial de R Markdown está en inglés. Realmente, si se tiene un dominio básico del idioma no debería suponer ningún problema a la hora de entender su contenido, pero es la diferencia más notable. La elección entre una y otra dependerá del usuario. Ambas contienen la información para iniciarse en el uso de R Markdown. 
+
+# Ofertas de Empleo Público del Servicio Andaluz de Sanidad para puestos de Facultativos/as Especialistas de Área
+
+  En este apartado se va a realizar un estudio de cómo han evolucionado a lo largo de los años las ofertas de empleo público del Servicio Andaluz de Sanidad para puestos de facultativos/as especialistas de área. El estudio que se presenta tiene la siguiente estructura:  
+  
+  * Histórico de plazas ofertadas.  
+  * Análisis del año 2017.  
+  
+  Los datos se han obtenido de la [base de datos abierta del gobierno](https://datos.gob.es/es/catalogo?q=servicio+andaluz&theme_id=salud&sort=metadata_modified+desc). Debido a que los datos que se proporcionan en el archivo de la base del datos del gobierno del año 2015 no están bien distribuido, se han tomado estos datos directamente de la página de la [Junta de Andalucía](https://www.juntadeandalucia.es/boja/2015/44/1).   
+
+## Histórico de plazas ofertadas
+
+  El número de plazas de empleo público que se ofertan en Andalucía se presenta en el Boletín Oficial de la Junta de Andalucía. Ahí se estipulan las plazas que se ofertan, si son de promoción interna o si el ingreso es de acceso libre y el porcentaje de plazas que se reservan a personas con discapacidad. Estos valores dependen del presupuesto de la comunidad autónoma, de la demanda  de especialistas que haya en el área en concreto y las necesidades de la población en el año que se publican. La dependencia de estos factores hace que haya habido años en los que no se han ofertado plazas para facultativos/as especialistas de área.  
+  
+
+```{r datos, include=FALSE}
+oepsas <- read.csv('resources/oep_sas_2018.csv',header = T,encoding = 'UTF-8')
+sas <- oepsas
+
+## webscrapping
+
+oepsas_2015_acceso_libre <- "https://www.juntadeandalucia.es/boja/2015/44/1"
+tmp1 <- read_html(oepsas_2015_acceso_libre)
+tmp2 <- html_nodes(tmp1,xpath = '//*[@id="cuerpo"]/div/table[2]')
+tmp3 <- html_nodes(tmp1,xpath = '//*[@id="cuerpo"]/div/table[3]')
+
+sapply(tmp2, function(x) dim(html_table(x, fill = TRUE)))
+sapply(tmp3, function(x) dim(html_table(x, fill = TRUE)))
+
+acc_lib15 <- html_table(tmp2[[1]], fill = TRUE, header = T)
+promo_15  <- html_table(tmp3[[1]], fill = TRUE, header = T)
+```
+ 
+ 
+```{r limpieza, echo=FALSE}
+colnames(acc_lib15)  <- c("Categoria","Especialidad","Plazas","Reserva_discapacidad","Total_plazas")
+colnames(promo_15)   <- c("Categoria","Especialidad","Plazas","Reserva_discapacidad","Total_plazas")
+colnames(sas)        <- c("Anio","Categoria","Especialidad","Plazas","Reserva_discapacidad","Total_plazas","Fecha_BOJA","url","Tipo_ingreso")
+
+sas$Anio          <-   as.character(sas$Anio)
+sas$Categoria     <-   as.character(sas$Categoria) 
+sas$Especialidad  <-   as.character(sas$Especialidad) 
+sas$Fecha_BOJA    <-   as.character(sas$Fecha_BOJA) 
+sas$Tipo_ingreso  <-   as.character(sas$Tipo_ingreso)
+sas$url           <-   NULL 
+
+# Quito las filas que necesitan arreglarse.
+ce_17 <- sas[sas$Anio == "2017 Convocatoria extraordinaria",]
+sas <- sas[(sas$Anio != "2015") | (sas$Anio != "2017 Convocatoria extraordinaria"),]
+
+
+#Limpiamos sas.
+sas <- sas[(sas$Categoria == "FACULTATIVO/A ESPECIALISTA DE ÁREA") | (grepl("FEA",sas$Especialidad)),]
+sas <- sas[!grepl("^$",sas$Especialidad),]
+sas$Especialidad <- gsub("FEA ","",sas$Especialidad)  
+sas$Categoria <- "FACULTATIVO/A ESPECIALISTA DE ÁREA" 
+sas$Boletin <- str_extract(sas$Fecha_BOJA,"Boletín número [0-9]+")
+sas$Boletin <- as.numeric(gsub("[^0-9]","",sas$Boletin))
+sas$Fecha_BOJA <- dmy(str_extract(sas$Fecha_BOJA,"[0-9]+/[0-9]+/[0-9]+"))
+
+#Limpiamos ce_17.
+ce_17 <- ce_17[ce_17$Especialidad %in% sas$Especialidad,]
+
+foo <- function(tabla){
+x<-tabla
+x$Anio <- gsub("[^0-9]+"," C.E.",x$Anio)
+x$Categoria <- "FACULTATIVO/A ESPECIALISTA DE ÁREA" 
+x$Boletin <- str_extract(x$Fecha_BOJA,"Boletín número [0-9]+")
+x$Boletin <- as.numeric(gsub("[^0-9]","",x$Boletin))
+x$Reserva_discapacidad <- rep(0,length(x$Reserva_discapacidad))
+x$Fecha_BOJA <- dmy(str_extract(x$Fecha_BOJA,"[0-9]+/[0-9]+/[0-9]+"))
+tabla <- x
+}
+
+ce_17 <- foo(ce_17)
+ce_17 <- ce_17[ce_17$Total_plazas != 28,]
+
+#Ponemos 2015 de la manera que necesitamos.
+
+
+acc_lib15 <- acc_lib15[grepl("FACULTATIVO/A",acc_lib15$Categoria) | (acc_lib15$Categoria == ""),]
+promo_15  <- promo_15[grepl("FACULTATIVO/A",promo_15$Categoria) | (promo_15$Categoria == ""),]
+
+acc_lib15$Categoria <- "FACULTATIVO/A ESPECIALISTA DE ÁREA"
+promo_15$Categoria <- "FACULTATIVO/A ESPECIALISTA DE ÁREA"
+
+acc_lib15$Fecha_BOJA <- dmy("28/12/2017")
+promo_15$Fecha_BOJA  <- dmy("28/12/2017")
+
+acc_lib15$Tipo_ingreso <- "ACCESO LIBRE"
+promo_15$Tipo_ingreso <- "PROMOCIÓN INTERNA"
+
+c_15  <- rbind(acc_lib15,promo_15)
+Anio  <- rep("2015",nrow(c_15))
+Boletin <- rep("247",nrow(c_15))
+c_15  <- cbind(Anio,c_15,Boletin) 
+
+#Tabla final.
+
+oferta_pub_sas <- rbind(sas,c_15,ce_17)
+```
+
+
+```{r grafico 1,echo=FALSE}
+#### GRÁFICOS ####
+
+tabla1 <- ddply(oferta_pub_sas,.(Fecha_BOJA),summarise,total= sum(Total_plazas))
+
+
+## historico de las especialidades
+
+grafico1 <- ggplot(data = tabla1) +
+  geom_point(mapping = aes(x= Fecha_BOJA,y= total,size=6,color="red"))+
+  labs(
+    x = "Fecha de la convocatoria",
+    y = "Número total de plazas ofertadas"
+      )+
+  scale_x_date(breaks=tabla1$Fecha_BOJA)
+  
+grafico1 <- grafico1 + theme_bw() +  theme(axis.text.x=element_text(angle = 90),legend.position = "none")
+grafico1
+```
+
+  En este primer gráfico observamos que únicamente se han ofertado plazas para especialistas de área ocho veces en catorce años. En el año **2017** hubo una convocatoria extraordinaria de plazas de empleo público debido a las necesidades que hubo ese año, pero ya analizaremos ese dato en otro gráfico. Se adjunta la siguiente tabla donde se puede ver el total de las plazas ofertadas en los años en los que se ofertaron.  
+
+```{r tabla,echo=FALSE}
+kable(tabla1,col.names = c("Fecha del Boletín Oficial de la J.A.","Total de plazas ofertadas"),align = 'c')
+
+```
+
+```{r grafico 2,echo=FALSE}
+# FACETAS
+
+grafico <- ggplot(data = oferta_pub_sas) +
+  geom_bar(mapping = aes(Tipo_ingreso, fill = Tipo_ingreso ))+
+  facet_grid(~ Anio) + 
+  labs(
+    x = "Tipo de ingreso",
+    y = "Número de especialidades"
+  ) 
+
+grafico <- grafico + theme_bw() +  theme(axis.text.x=element_text(angle = 90),legend.position = "none" )
+grafico
+```
+
+  Aquí se representa el número de especialidades que se ofertaron dependiendo de si el ingreso era de acceso libre, de promoción interna u ambas. Como podemos observar, de los dos primeros años que se tienen datos las especialidades de las que se ofertaron plazas fueron tanto de acceso libre como de promoción interna. Comparando los años **2004** y **2007** con los tres siguientes, se puede observar, en el primer gráfico, que el número de plazas que se ofertaron fueron bastante menor de **2013** a **2015** y que en los años **2013** y **2014** el número de especialidades que se ofertaron fue menor.  
+  
+  Esto puede ser debido a que en **2004** y **2007**, según los datos con los que contamos, fueran los primeros en los que se ofertaron oficialmente plazas a especialistas, la necesidad de estos era mayor y la demanda de estos puestos venía tanto de fuera como de dentro del sistema sanitario. En cuanto al periodo de **2013** a **2015**, puede que el presupuesto fuera considerablemente menor o que la demanda de especialistas fuera menor, aunque sorprende que después de un largo periodo de tiempo en el que no se ofertaron plazas, cuando volvieron a ofertarse, el número fuera tan reducido.  
+  
+  En el año **2017** el número de plazas que se ofertaron se dispara debido, a como se indica en el BOJA (abreviatura de, Boletín Oficial de la Junta de Andalucía), el aumento de presupuesto y la reducida oferta de empleo público que hubo en los años anteriores hizo que en ese año se convocaran de manera extraordinaria nuevas plazas de empleo público.  
+  
+  En **2018**, después del incremento del año **2017**, el número de plazas ofertadas volvió a disminuir.
+  
+## Análisis del año 2017
+
+  Como acabamos de comentar, en el año **2017** hubo dos convocatorias de empleo público. Vamos a comentar las diferencias entre la covocatoria ordinaria y extraordinaria y cuales podrían ser las razones de que se convocaran nuevas plazas en el mismo año dos veces.
+  
+
+```{r grafico 3,echo=FALSE,fig.height=8,fig.width=8}
+# DINÁMINCO
+
+ordena_17 <- oferta_pub_sas[oferta_pub_sas$Anio == "2017" & oferta_pub_sas$Tipo_ingreso == "ACCESO LIBRE",]
+ordena_17 <- ordena_17[order(ordena_17$Especialidad),]
+ordena_17_ce <- ce_17[order(ce_17$Especialidad),]
+
+p <- plot_ly(ordena_17, x = ~Especialidad, y = ~Total_plazas, type = 'bar', name = 'Plazas Totales 2017 C.O.') %>%
+  add_trace(y = ~ordena_17_ce$Total_plazas, name = 'Plazas Totales 2017 C.E.') %>%
+  layout(yaxis = list(title = 'Plazas'), barmode = 'group')
+p
+```
+  
+  En esta gráfica podemos ver la comparación entre el número de total plazas ofertadas por especialidad en la convocatoria ordinaria (C.O.) y extraordinaria (C.E.) de **2017**. Se observa que el aumento es muy considerable. En el BOJA se indica que debido a que en los años anteriores la oferta de empleo público habia sido notablemente baja y la temporalidad del sector sanitario había aumentado, se necesitaba de una convocatoria extra de plazas de empleo público. Se observa en la gráfica del apartado anterior que en la convocatoria extraordinaria las plazas que se ofertaros eran de acceso libre. Esto es debido a la ya mencionada temporalidad en la que estaba sumergido el sector sanitario. Esta necesidad unida al aumento del presupuesto hizo posible el incremento de las plazas ofertadas a facultativos/as especialistas de área. El área que destaca con respecto a todas es **Anatomía Patológica**.  
+  
+## Conclusión
+
+  La conclusión que podemos sacar es, que en los primeros años la necesidad de especialistas en el sector sanitario era muy superior al preriodo 2013 a 2015. Puede que en ese periodo la necesidad de especialistas fuera menor o, que debido a la falta de presupuesto, no se ofertaran plazas y la temporalidad del sector sanitario aumentara. En 2017 el presupuesto aumenta considerablemente y la necesidad de eliminar la temporalidad del sector sanitario hace que la Junta de Andalucía aumente considerablemente la oferta de empleo público en es Servicio Andaluz de Sanidad (SAS). El aumento de 2017 condiciona que en 2018 el número de oferta se viera reducida a valores del periodo 2013 a 2015.  
+  Es de mencionar que, excepto en la convocatoria de plazas extraordinaria de 2017, el número de plazas que eran de acceso libre o promoción interna es prácticamente el mismo en cada una de las convocatorias.
